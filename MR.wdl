@@ -17,7 +17,7 @@ command{
         } 
 
 runtime {
-        docker: 'quay.io/kfkf33/susier:v24.01.1'        
+        docker: 'evinpadhi/mr_finemapping_meta:latest'        
         memory: "${Memory}GB"
         disks: "local-disk 500 SSD"
         bootDiskSizeGb: 25
