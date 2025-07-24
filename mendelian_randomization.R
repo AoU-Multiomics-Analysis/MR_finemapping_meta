@@ -153,6 +153,7 @@ gene.symbols
 }
 
 ####### PARSE COMMAND LINE ARGUMENTS #######
+message('Begin analaysis')
 option_list <- list(
   #TODO look around if there is a package recognizing delimiter in dataset
   optparse::make_option(c("--MungedSumstats"), type="character", default=NULL,
@@ -166,7 +167,8 @@ option_list <- list(
     optparse::make_option(c("--QTLGroup"), type="character", default=NULL,
                         help="", metavar = "type"),
   )
- 
+
+message('Parsinging command line arguments')
 opt <- optparse::parse_args(optparse::OptionParser(option_list=option_list))
 
 group <- opt$QTLGroup
