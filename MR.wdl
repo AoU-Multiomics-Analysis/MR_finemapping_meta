@@ -1,7 +1,6 @@
 task MR {
     File MungedSumstats 
     File SusieFinemapping
-    File MR_script
     String OutputPrefix
     Int Memory
     Int QTLSampleSize
