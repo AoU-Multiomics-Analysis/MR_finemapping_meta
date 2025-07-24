@@ -241,12 +241,15 @@ MR_output %>% write_tsv(MR_output_file)
 
 ####### RUN GENE SET ENRICHMENT ######
 message('Extracting significant genes for GSEA')
-sig_MR_genes <- MR_output %>%  arrange(desc(abs(meta_eff))) %>% filter(meta_pval < .05)
+sig_MR_genes <- MR_output %>%  
+    arrange(desc(abs(meta_eff))) %>%
+    mutate(padj = p.adjust(meta_pval,method = 'fdr')) %>% 
+    filter(padj < .1)
 gene_list <- sig_MR_genes %>% extract_gene_set
 
 message('Running enrichment analysis')
-enrichr_res <- enrichr(gene_list$name, dbs) %>% 
-    map_dfr(~bind_rows(.)) %>% 
+enrichr_res <- enrichr(gene_list$name, dbs) %>%
+    imap_dfr(~bind_rows(.) %>% mutate(library = .y)) %>% 
     arrange(Adjusted.P.value)
 
 message('Writing enrichment results to output')
