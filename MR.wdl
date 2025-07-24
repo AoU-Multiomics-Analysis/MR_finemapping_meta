@@ -8,7 +8,7 @@ task MR {
 
 command{
     
-    Rscript /opt/mendelian_randomization.R \
+    Rscript /tmp/mendelian_randomization.R \
         --MungedSumstats ${MungedSumstats} \
         --SusieFinemapping ${SusieFinemapping} \
         --OutputPrefix ${OutputPrefix} \

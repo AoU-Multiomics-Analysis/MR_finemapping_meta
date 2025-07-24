@@ -17,7 +17,7 @@ RUN micromamba install -y -n base -c conda-forge -c bioconda -c dnachun \
 
 #RUN R -e "install.packages('TwoSampleMR', repos = c('https://mrcieu.r-universe.dev', 'https://cloud.r-project.org'))"
 
-COPY mendelian_randomization.R /opt/mendelian_randomization.R
+COPY mendelian_randomization.R mendelian_randomization.R
 #RUN wget  https://raw.githubusercontent.com/evin-padhi/MR_finemapping_meta/refs/heads/main/mendelian_randomization.R -o /opt/mendelian_randomization.R
 
 ## Default command to run when the container starts
