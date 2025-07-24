@@ -11,7 +11,7 @@ RUN micromamba install -y -n base -c conda-forge -c bioconda -c dnachun \
     conda-forge::r-optparse \
     conda-forge::r-enrichr  \
     conda-forge::r-gprofiler2 \
-    dnachun::TwoSampleMR
+    dnachun::r-twosamplemr
 
 #RUN R -e "install.packages('TwoSampleMR', repos = c('https://mrcieu.r-universe.dev', 'https://cloud.r-project.org'))"
 
