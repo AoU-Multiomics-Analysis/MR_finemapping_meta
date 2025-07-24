@@ -163,11 +163,14 @@ option_list <- list(
     optparse::make_option(c("--OutputPrefix"), type="character", default=NULL,
                         help="output prefix for files", metavar = "type")
     optparse::make_option(c("--QTLSampleSize"), type="character", default=NULL,
-                        help="", metavar = "type")
+                        help="", metavar = "type"),
+    optparse::make_option(c("--QTLGroup"), type="character", default=NULL,
+                        help="", metavar = "type"),
   )
  
 opt <- optparse::parse_args(optparse::OptionParser(option_list=option_list))
 
+group <- opt$QTLGroup
 output_prefix <- opt$OutputPrefix
 enrichr_output <- paste0(output_prefix,'_MR.tsv')
 MR_output_file <- paste0(output_prefix,'_MR_enrich.tsv')
@@ -237,14 +240,14 @@ MR_output <- MR_input %>%
 
 
 message('Writing MR results  to output')
-MR_output %>% write_tsv(MR_output_file)
+MR_output %>% mutate(group = group)%>% write_tsv(MR_output_file)
 
 ####### RUN GENE SET ENRICHMENT ######
 message('Extracting significant genes for GSEA')
 sig_MR_genes <- MR_output %>%  
     arrange(desc(abs(meta_eff))) %>%
     mutate(padj = p.adjust(meta_pval,method = 'fdr')) %>% 
-    filter(padj < .1)
+    filter(padj < .1 & Q_pval > .05)
 gene_list <- sig_MR_genes %>% extract_gene_set
 
 message('Running enrichment analysis')
