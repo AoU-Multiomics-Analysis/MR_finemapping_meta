@@ -48,4 +48,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: docker.io/${{ vars.DOCKERIO_USERNAME }}/mr_finemapping_meta:latest
+          tags: docker.io/${{ secrets.DOCKERIO_USERNAME }}/mr_finemapping_meta:latest
