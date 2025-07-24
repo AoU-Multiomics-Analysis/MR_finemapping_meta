@@ -25,7 +25,6 @@ dbs <- c('GO_Biological_Process_2025',
 ############ FUNCTIONS ###########
 # helper function to load susie parquet files 
 load_finemapping_data <- function(path){
-system(paste0('gsutil cp ', path,' .'))    
 split_name <- str_split(basename(path),'_|\\.') %>% unlist()
 group <- split_name[3]
     
