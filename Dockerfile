@@ -9,7 +9,8 @@ RUN micromamba install -y -n base -c conda-forge -c bioconda \
     conda-forge::r-tidyverse \
     conda-forge::datatable \
     conda-forge::r-optparse \
-    conda-forge::r-enrichr 
+    conda-forge::r-enrichr  \
+    conda-forge::r-gprofiler2
 
 RUN R -e "install.packages('TwoSampleMR', repos = c('https://mrcieu.r-universe.dev', 'https://cloud.r-project.org'))"
 
