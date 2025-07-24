@@ -172,15 +172,28 @@ opt <- optparse::parse_args(optparse::OptionParser(option_list=option_list))
 
 group <- opt$QTLGroup
 output_prefix <- opt$OutputPrefix
+
 enrichr_output <- paste0(output_prefix,'_MR.tsv')
 MR_output_file <- paste0(output_prefix,'_MR_enrich.tsv')
+message(paste0('Writing MR results to',MR_output_file ))
+
+
+GWAS_path <- opt$MungedSumstats
+fm_path <- opt$SusieFinemapping
+message(paste0('Using ',GWAS_path , ' for GWAS'))
+message(paste0('Using ',fm_path , ' for QTL'))
+message(paste0('QTL group: ',group ))
+
+
+
+
 
 ########## LOAD DATA #########
 message('Loading summary stats')
-GWAS_dat <- load_gwas_data(basename(opt$MungedSumstats))
+GWAS_dat <- load_gwas_data(basename(GWAS_path))
 
 message('Loading QTL finemapping')
-fm_data <- load_finemapping_data(basename(opt$SusieFinemapping)) %>% 
+fm_data <- load_finemapping_data(basename(fm_path)) %>% 
     mutate(variant = str_remove_all(variant,'chr'))
 
 message('Cleaning finemapping data and adjust pips')
