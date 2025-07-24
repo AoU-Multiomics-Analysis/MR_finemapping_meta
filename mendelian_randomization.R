@@ -162,11 +162,11 @@ option_list <- list(
   optparse::make_option(c("--SusieFinemapping"), type="character", default=NULL,
                         help="Susie finemapping parquet", metavar = "type"),
     optparse::make_option(c("--OutputPrefix"), type="character", default=NULL,
-                        help="output prefix for files", metavar = "type")
+                        help="output prefix for files", metavar = "type"),
     optparse::make_option(c("--QTLSampleSize"), type="character", default=NULL,
                         help="", metavar = "type"),
     optparse::make_option(c("--QTLGroup"), type="character", default=NULL,
-                        help="", metavar = "type"),
+                        help="", metavar = "type")
   )
 
 message('Parsinging command line arguments')
