@@ -1,3 +1,5 @@
+print('Loading libraries')
+
 library(tidyverse)
 library(data.table)
 library(TwoSampleMR)
@@ -18,7 +20,6 @@ dbs <- c('GO_Biological_Process_2025',
          'KEGG_2021_Human',
          'Reactome_Pathways_2024'
         )
-
 
 
 
