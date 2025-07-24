@@ -44,12 +44,14 @@ GWAS_dat <- fread(GWAS_path)
 GWAS_dat_cols <- colnames(GWAS_dat)
 
 if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
-GWAS_dat$se.outcome <- get_se(GWAS_dat$OR,GWAS_dat$P)
+mesasge('SE measurement is missing, computing from OR and P value')
+GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
     
     
 } else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
-GWAS_dat$se.outcome <- TwoSampleMR::get_eff(GWAS_dat$BETA,GWAS_dat$P)
+mesasge('SE measurement is missing, computing from BETA and P value')
+GWAS_dat$SE <- TwoSampleMR::get_eff(GWAS_dat$BETA,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
 
 } else if ('SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
@@ -62,14 +64,15 @@ GWAS_out <- GWAS_dat %>%
     dplyr::rename( 'effect_allele.outcome' = 'A1',
                    'other_allele.outcome' = 'A2',
                    'id.outcome' = 'outcome',
-                   'eaf.outcome' = 'FRQ'
+                   'eaf.outcome' = 'FRQ',
+                    'se.outcome' = 'SE'
                     ) %>% 
     mutate(outcome = 'GWAS',
-           variant_position = paste0(CHR,'_',BP))
+           VARIANT_POSITION = paste0(CHR,'_',BP),
+           VARIANT_ID = paste(CHR,BP,effect_allele.outcome,other_allele.outcome,sep ='_')) %>% 
+    mutate(RSID = SNP,SNP = VARIANT_ID)
 GWAS_out
 }
-
-
 filter_variants_adjust_pips <- function(fm_data,variant_list){
 
 # filter to variants in the GWAS data and adjust 
@@ -186,7 +189,7 @@ cleaned_fm_data <- fm_data %>%
 message('Merging data')
 harmonised_dat <- harmonise_data(
     exposure_dat = cleaned_fm_data %>%  select(-SNP) %>% dplyr::rename('SNP' = 'variant'),
-    outcome_dat = GWAS_dat  %>% select(-SNP)%>% dplyr::rename('SNP' = 'VARIANT_ID') ,
+    outcome_dat = GWAS_dat,
     action = 1
 )
 
