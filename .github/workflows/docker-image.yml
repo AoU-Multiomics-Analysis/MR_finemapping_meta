@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build --platform linux/amd64 . --file Dockerfile --tag evinpadhi/mr_finemapping_meta:latest
+      run: docker build --platform linux/amd64  --file Dockerfile --tag evinpadhi/mr_finemapping_meta:latest
   
   push_to_registry:
     name: Push Docker image to Docker Hub
