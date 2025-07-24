@@ -5,6 +5,7 @@ task MR {
     String OutputPrefix
     Int Memory
     Int QTLSampleSize
+    String QTLGroup
 
 command{
     
@@ -12,7 +13,8 @@ command{
         --MungedSumstats ${MungedSumstats} \
         --SusieFinemapping ${SusieFinemapping} \
         --OutputPrefix ${OutputPrefix} \
-        --QTLSampleSize ${QTLSampleSize}
+        --QTLSampleSize ${QTLSampleSize} \
+        --QTLGroup ${QTLGroup}
         } 
 
 runtime {
