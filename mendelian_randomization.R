@@ -29,7 +29,7 @@ load_finemapping_data <- function(path){
 split_name <- str_split(basename(path),'_|\\.') %>% unlist()
 group <- split_name[3]
     
-fm_data <- arrow::read_parquet(basename(path)) %>% 
+fm_data <- arrow::read_parquet(path) %>% 
     #separate(variant_id,into = c('chrom','pos','alt')) %>% 
     #extract(pos, into = c("pos", "ref"), regex = "([0-9]+)([A-Za-z]+)") %>%
     mutate(group = group)
@@ -192,10 +192,10 @@ message(paste0('QTL group: ',group ))
 
 ########## LOAD DATA #########
 message('Loading summary stats')
-GWAS_dat <- load_gwas_data(basename(GWAS_path))
+GWAS_dat <- load_gwas_data(GWAS_path)
 
 message('Loading QTL finemapping')
-fm_data <- load_finemapping_data(basename(fm_path)) %>% 
+fm_data <- load_finemapping_data(fm_path) %>% 
     mutate(variant = str_remove_all(variant,'chr'))
 
 message('Cleaning finemapping data and adjust pips')
