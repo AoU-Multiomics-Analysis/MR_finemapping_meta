@@ -55,7 +55,7 @@ GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
 
 if (!'FRQ' %in% GWAS_dat_cols){
-GWAS_dat_cols$FRQ <- NA
+GWAS_dat$FRQ <- NA
 
 }
 
