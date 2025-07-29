@@ -48,7 +48,7 @@ GWAS_dat <- fread(GWAS_path)
 GWAS_dat_cols <- colnames(GWAS_dat)
 
 if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
-messasge('SE measurement is missing, computing from OR and P value')
+message('SE measurement is missing, computing from OR and P value')
 GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
     
