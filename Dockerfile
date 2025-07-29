@@ -18,7 +18,7 @@ RUN micromamba install -y -n base -c conda-forge -c bioconda -c dnachun \
     conda-forge::wget \
     bioconda::bioconductor-fgsea
 
-COPY mendelian_randomization.R . 
+COPY mendelian_randomization.R /mendelian_randomization.R
 
 ## Default command to run when the container starts
 CMD ["bash"]
