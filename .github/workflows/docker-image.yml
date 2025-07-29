@@ -33,3 +33,4 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: evinpadhi/mr_finemapping_meta:latest
+          no-cache: true
