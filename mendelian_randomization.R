@@ -47,17 +47,20 @@ load_gwas_data <- function(GWAS_path){
 GWAS_dat <- fread(GWAS_path)
 GWAS_dat_cols <- colnames(GWAS_dat)
 
-message(paste0('GWAS columns: ',GWAS_dat_cols))
+message(paste0('GWAS columns: ',GWAS_dat_cols,'\n'))
+
+if (!'FRQ' %in% GWAS_dat_cols){
+message('Missing FRQ column in GWAS data\n Adding column in as NA')
+GWAS_dat$FRQ <- NA
+
+}
+
+
 
 if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
 message('SE measurement is missing, computing from OR and P value')
 GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
-
-if (!'FRQ' %in% GWAS_dat_cols){
-GWAS_dat$FRQ <- NA
-
-}
 
     
 } else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
