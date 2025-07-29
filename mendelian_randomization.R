@@ -47,6 +47,8 @@ load_gwas_data <- function(GWAS_path){
 GWAS_dat <- fread(GWAS_path)
 GWAS_dat_cols <- colnames(GWAS_dat)
 
+message(paste0('GWAS columns: ',GWAS_dat_cols))
+
 if (!'SE' %in% GWAS_dat_cols & 'OR' %in% GWAS_dat_cols){
 message('SE measurement is missing, computing from OR and P value')
 GWAS_dat$SE <- get_se(GWAS_dat$OR,GWAS_dat$P)
@@ -197,9 +199,6 @@ message(paste0('QTL group: ',group ))
 ########## LOAD DATA #########
 message('Loading summary stats')
 GWAS_dat <- load_gwas_data(GWAS_path)
-
-GWAS_cols <- colnames(GWAS_dat)
-message(paste0('GWAS data columns: ',GWAS_cols))
 
 message('Loading QTL finemapping')
 fm_data <- load_finemapping_data(fm_path) %>% 
