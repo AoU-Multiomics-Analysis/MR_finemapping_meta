@@ -1,10 +1,14 @@
-print('Loading libraries')
+message('MR start')
+
 library(R.utils)
 library(tidyverse)
 library(data.table)
 library(TwoSampleMR)
 library(enrichR)
 library(optparse)
+
+message('Libraries loaded')
+
 #install.packages('R.utils')
 theme_set(theme_classic())
 theme_update(panel.border = element_rect(fill = NA,linewidth = .9), 

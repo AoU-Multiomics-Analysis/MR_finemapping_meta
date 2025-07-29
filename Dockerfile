@@ -1,4 +1,3 @@
-#
 #Use micromamba as the base image
 FROM mambaorg/micromamba:1.5.3
 USER root
