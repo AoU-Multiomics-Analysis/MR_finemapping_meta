@@ -198,6 +198,9 @@ message(paste0('QTL group: ',group ))
 message('Loading summary stats')
 GWAS_dat <- load_gwas_data(GWAS_path)
 
+GWAS_cols <- colnames(GWAS_dat)
+message(paste0('GWAS data columns: ',GWAS_cols))
+
 message('Loading QTL finemapping')
 fm_data <- load_finemapping_data(fm_path) %>% 
     mutate(variant = str_remove_all(variant,'chr'))
