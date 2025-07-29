@@ -205,7 +205,7 @@ fm_data <- load_finemapping_data(fm_path) %>%
 message('Cleaning finemapping data and adjust pips')
 # load finemapping data and compute standard error
 cleaned_fm_data <- fm_data %>% 
-    format_fm_data_MR(sample_size = int(opt$QTLSampleSize))  %>% 
+    format_fm_data_MR(sample_size = as.integer(opt$QTLSampleSize))  %>% 
     filter_variants_adjust_pips(GWAS_dat$VARIANT_ID)
 
 message('Merging data')
