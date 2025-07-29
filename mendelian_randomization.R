@@ -1,3 +1,4 @@
+message('MR updated')
 message('MR start')
 
 library(R.utils)
