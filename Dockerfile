@@ -14,7 +14,8 @@ RUN micromamba install -y -n base -c conda-forge -c bioconda -c dnachun \
     conda-forge::r-gprofiler2 \
     dnachun::r-twosamplemr \
     conda-forge::r-r.utils \
-    conda-forge::r-arrow 
+    conda-forge::r-arrow \
+    conda-forge::wget 
 
 
 COPY mendelian_randomization.R . 
