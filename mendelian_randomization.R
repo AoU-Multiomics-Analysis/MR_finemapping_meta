@@ -54,7 +54,7 @@ GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'OR')
     
     
 } else if (!'SE' %in% GWAS_dat_cols & 'BETA' %in% GWAS_dat_cols){
-mesasge('SE measurement is missing, computing from BETA and P value')
+messasge('SE measurement is missing, computing from BETA and P value')
 GWAS_dat$SE <- TwoSampleMR::get_eff(GWAS_dat$BETA,GWAS_dat$P)
 GWAS_dat <- rename(GWAS_dat,'beta.outcome' = 'BETA')
 
