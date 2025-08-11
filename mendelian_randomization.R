@@ -31,13 +31,14 @@ dbs <- c('GO_Biological_Process_2025',
 ############ FUNCTIONS ###########
 # helper function to load susie parquet files 
 load_finemapping_data <- function(path){
-split_name <- str_split(basename(path),'_|\\.') %>% unlist()
-group <- split_name[3]
+#split_name <- str_split(basename(path),'_|\\.') %>% unlist()
+#group <- split_name[3]
     
 fm_data <- arrow::read_parquet(path) %>% 
+    dplyr::rename('pos' = 'position' )
     #separate(variant_id,into = c('chrom','pos','alt')) %>% 
     #extract(pos, into = c("pos", "ref"), regex = "([0-9]+)([A-Za-z]+)") %>%
-    mutate(group = group)
+   # mutate(group = group)
 fm_data
     
 }
