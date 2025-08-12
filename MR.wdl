@@ -17,7 +17,7 @@ command{
         } 
 
 runtime {
-        docker: 'evinpadhi/mr_finemapping_meta:latest'        
+        docker: 'ghcr.io/aou-multiomics-analysis/mr_finemapping_meta:main'        
         memory: "${Memory}GB"
         disks: "local-disk 500 SSD"
         bootDiskSizeGb: 25
