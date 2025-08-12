@@ -191,10 +191,9 @@ opt <- optparse::parse_args(optparse::OptionParser(option_list=option_list))
 group <- opt$QTLGroup
 output_prefix <- opt$OutputPrefix
 
-enrichr_output <- paste0(output_prefix,'_MR.tsv')
-MR_output_file <- paste0(output_prefix,'_MR_enrich.tsv')
-message(paste0('Writing MR results to',MR_output_file ))
-
+MR_output_file <- paste0(output_prefix,'_MR.tsv')
+enrichr_output <- paste0(output_prefix,'_MR_enrich.tsv')
+message(paste0('Writing MR results to: ',MR_output_file ))
 
 GWAS_path <- opt$MungedSumstats
 fm_path <- opt$SusieFinemapping
@@ -279,12 +278,17 @@ sig_MR_genes <- MR_output %>%
     arrange(desc(abs(meta_eff))) %>%
     mutate(padj = p.adjust(meta_pval,method = 'fdr')) %>% 
     filter(padj < .1 & Q_pval > .05)
+
 gene_list <- sig_MR_genes %>% extract_gene_set
+num_sig_genes <- gene_list %>% nrow  
+message('Number of significant genes')
+message(num_sig_genes)
 
 message('Running enrichment analysis')
 enrichr_res <- enrichr(gene_list$name, dbs) %>%
-    imap_dfr(~bind_rows(.) %>% mutate(library = .y)) %>% 
+    imap_dfr(~mutate(.x, library = .y)) %>% 
     arrange(Adjusted.P.value)
+
 
 message('Writing enrichment results to output')
 enrichr_res %>% write_tsv(enrichr_output)
