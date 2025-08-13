@@ -206,6 +206,35 @@ gene.symbols <- gconvert(gene_set$gene_id,organism="hsapiens",target="ENTREZGENE
 gene.symbols
 }
 
+LOO_analysis <- function(MR_input,molecular_trait_id) {
+
+            CS_list <- MR_input %>% distinct(cs_id) %>%  pull(cs_id)
+            
+            LOO_data <- data.frame()
+            for (x in seq(1,length(CS_list))){
+            
+            current_cs <- CS_list[x]
+            
+            LOO_x <- MR_input %>% filter(cs_id != CS_list[x]) %>% run_MR() %>%  mutate(LOO_cs = current_cs)
+            LOO_data <- bind_rows(LOO_x,LOO_data)   
+                }  
+            LOO_data
+}
+
+run_LOO_analysis <- function(MR_res,MR_input){
+            sig_genes <- MR_test %>% filter(padj < .05 & Q_pval > .05) %>% filter(num_CS > 1) %>% pull(molecular_trait_id)
+            LOO_data <- data.frame()
+            for (x in sig_genes){
+            
+            trait_dat <- MR_input %>% filter(molecular_trait_id == x)
+            LOO_gene <- LOO_analysis(trait_dat,x)
+            LOO_data <- bind_rows(LOO_gene,LOO_data)
+                
+                }
+            LOO_data   
+}
+
+         
 ####### PARSE COMMAND LINE ARGUMENTS #######
 message('Begin analaysis')
 option_list <- list(
@@ -230,6 +259,7 @@ output_prefix <- opt$OutputPrefix
 
 MR_output_file <- paste0(output_prefix,'_MR.tsv')
 enrichr_output <- paste0(output_prefix,'_MR_enrich.tsv')
+LOO_analysis_file <- paste0(output_prefix,'_MR_LOO.tsv')
 message(paste0('Writing MR results to: ',MR_output_file ))
 
 GWAS_path <- opt$MungedSumstats
@@ -277,6 +307,10 @@ MR_output <- MR_input %>%
 message('Writing MR results  to output')
 MR_output %>% mutate(group = group)%>% write_tsv(MR_output_file)
 
+
+LOO_data <- run_LOO_analysis(MR_output,MR_input)
+LOO_data %>% write_tsv(LOO_analysis_file)
+         
 ####### RUN GENE SET ENRICHMENT ######
 message('Extracting significant genes for GSEA')
 sig_MR_genes <- MR_output %>%  
