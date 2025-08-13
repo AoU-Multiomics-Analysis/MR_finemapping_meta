@@ -28,6 +28,7 @@ runtime {
 output {
     File MR_output = "${OutputPrefix}_MR.tsv" 
     File MR_enrichr = "${OutputPrefix}_MR_enrich.tsv"
+    File MR_LOO = "{OutputPrefix}_MR_LOO.tsv"
 
     }
 }
