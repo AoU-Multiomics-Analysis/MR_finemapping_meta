@@ -126,10 +126,47 @@ MR_input <- harmonised_data %>%
         composite_bhat = sum((beta_yx * pip) / cpip),
         composite_sbhat = sum((beta_yx^2 + se_yx^2) * pip / cpip)
       ) %>%
+     mutate(
+        composite_sbhat = sqrt(composite_sbhat - composite_bhat^2),
+        wv = composite_sbhat^-2
+      ) %>% 
     ungroup()
     
 MR_input   
 }
+run_MR <- function(MR_input){
+MR_output <- MR_input %>% 
+    group_by(molecular_trait_id) %>% 
+    mutate(
+        meta_eff = sum(unique(wv) * unique(composite_bhat)),
+        sum_w = sum(unique(wv)),
+        se_meta_eff = sqrt(sum_w^-1),
+        num_CS = length(unique(cs_id))
+      ) %>% 
+      mutate(
+        num_IV = length(SNP),
+        meta_eff = meta_eff / sum_w,
+        meta_pval = 2 * pnorm(abs(meta_eff) / se_meta_eff, lower.tail = FALSE),
+        Q = sum(unique(wv) * (unique(composite_bhat) - unique(meta_eff))^2),
+        I2 = calc_I2(Q, composite_bhat),
+        Q_pval = pchisq(Q, df = length(unique(composite_bhat)) - 1, lower = F)
+      ) %>% 
+       ungroup() %>%
+      distinct(molecular_trait_id, .keep_all = TRUE) %>%
+      mutate(
+        cpip = round(cpip, 3),
+        meta_pval = round(meta_pval, 10),
+        meta_eff = round(meta_eff, 5),
+        se_meta_eff = round(se_meta_eff, 3),
+        Q = round(Q, 3),
+        Q_pval = round(Q_pval, 3),
+        I2 = round(I2, 3)
+      ) %>%
+      arrange(meta_pval) %>% 
+      select(molecular_trait_id, num_CS, num_IV, cpip, meta_eff, se_meta_eff, meta_pval, Q, Q_pval, I2)
+
+MR_output
+    } 
 
 format_fm_data_MR <- function(fm_data,sample_size){
 cleaned_fm_data <- fm_data %>%  
@@ -235,39 +272,7 @@ MR_input <- harmonised_dat %>%
 
 message('Running MR')
 MR_output <- MR_input %>%
-    group_by(molecular_trait_id) %>% 
-    mutate(
-        composite_sbhat = sqrt(composite_sbhat - composite_bhat^2),
-        wv = composite_sbhat^-2
-      )  %>% 
-    mutate(
-        meta_eff = sum(unique(wv) * unique(composite_bhat)),
-        sum_w = sum(unique(wv)),
-        se_meta_eff = sqrt(sum_w^-1),
-        num_CS = length(unique(cs_id))
-      )  %>% 
-      mutate(
-        num_IV = length(SNP),
-        meta_eff = meta_eff / sum_w,
-        meta_pval = 2 * pnorm(abs(meta_eff) / se_meta_eff, lower.tail = FALSE),
-        Q = sum(unique(wv) * (unique(composite_bhat) - unique(meta_eff))^2),
-        I2 = calc_I2(Q, composite_bhat),
-        Q_pval = pchisq(Q, df = length(unique(composite_bhat)) - 1, lower = F)
-      ) %>% 
-      ungroup() %>%
-      distinct(molecular_trait_id, .keep_all = TRUE) %>%
-      mutate(
-        cpip = round(cpip, 3),
-        meta_pval = round(meta_pval, 10),
-        meta_eff = round(meta_eff, 5),
-        se_meta_eff = round(se_meta_eff, 3),
-        Q = round(Q, 3),
-        Q_pval = round(Q_pval, 3),
-        I2 = round(I2, 3)
-      ) %>%
-      arrange(meta_pval) %>% 
-      select(molecular_trait_id, num_CS, num_IV, cpip, meta_eff, se_meta_eff, meta_pval, Q, Q_pval, I2)
-
+   run_MR()
 
 message('Writing MR results  to output')
 MR_output %>% mutate(group = group)%>% write_tsv(MR_output_file)
