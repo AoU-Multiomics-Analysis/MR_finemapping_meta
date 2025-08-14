@@ -304,7 +304,7 @@ message('Running MR')
 MR_output <- MR_input %>%
    run_MR()
 
-single_snp_genes <- MR_meta %>% filter(num_CS == 1 & num_IV == 1) %>% pull(molecular_trait_id)
+single_snp_genes <- MR_output %>% filter(num_CS == 1 & num_IV == 1) %>% pull(molecular_trait_id)
 
 if (length(single_snp_genes) > 0){
 message('Running single SNP MR')
