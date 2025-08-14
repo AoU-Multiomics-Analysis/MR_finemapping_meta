@@ -318,7 +318,7 @@ MR_singlesnp <- MR_input %>%
 
 out <- bind_rows(
                 MR_output %>% mutate(analysis_type = 'meta'),
-                 dat %>% mutate(analysis_type = 'singlesnp')
+                 MR_singlesnp %>% mutate(analysis_type = 'singlesnp')
             )
 }else {
     out <- MR_res
