@@ -317,7 +317,7 @@ MR_singlesnp <- MR_input %>%
     dplyr::select(molecular_trait_id,meta_eff,se_meta_eff,meta_pval,padj,-exposure,-outcome) 
 
 out <- bind_rows(
-                MR_res %>% mutate(analysis_type = 'meta'),
+                MR_output %>% mutate(analysis_type = 'meta'),
                  dat %>% mutate(analysis_type = 'singlesnp')
             )
 }else {
