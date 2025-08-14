@@ -325,7 +325,7 @@ out <- bind_rows(
 }
 
 message('Writing MR results  to output')
-out %>% mutate(group = group)%>% write_tsv(MR_output_file)
+out %>% mutate(group = group,trait = OutputPrefix)%>% write_tsv(MR_output_file)
 
 
 #LOO_data <- run_LOO_analysis(MR_output,MR_input)
