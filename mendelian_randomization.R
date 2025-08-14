@@ -304,8 +304,28 @@ message('Running MR')
 MR_output <- MR_input %>%
    run_MR()
 
+single_snp_genes <- MR_meta %>% filter(num_CS == 1 & num_IV == 1) %>% pull(molecular_trait_id)
+
+if (length(single_snp_genes) > 0){
+message('Running single SNP MR')
+MR_singlesnp <- MR_input %>% 
+    filter(molecular_trait_id %in% single_snp_genes) %>% 
+    dplyr::rename('beta.outcome' = 'bhat_y','se.outcome' = 'sbhat_y') %>% 
+    mr_singlesnp() %>% 
+    mutate(padj = p.adjust(p,method = 'fdr')) %>% 
+    dplyr::rename('molecular_trait_id' = 'id.exposure','meta_eff' = 'b','se_meta_eff' = 'se','meta_pval' = 'p') %>%
+    dplyr::select(molecular_trait_id,meta_eff,se_meta_eff,meta_pval,padj,-exposure,-outcome) 
+
+out <- bind_rows(
+                MR_res %>% mutate(analysis_type = 'meta'),
+                 dat %>% mutate(analysis_type = 'singlesnp')
+            )
+}else {
+    out <- MR_res
+}
+
 message('Writing MR results  to output')
-MR_output %>% mutate(group = group)%>% write_tsv(MR_output_file)
+out %>% mutate(group = group)%>% write_tsv(MR_output_file)
 
 
 LOO_data <- run_LOO_analysis(MR_output,MR_input)
